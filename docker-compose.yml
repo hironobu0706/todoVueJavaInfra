@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sampledb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    ports:
+    # この左項目、3306だとローカル内のMysqlとバッティングする？
+      - "3307:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+      # 永続化用のマウント先
+      - ./mysql_data:/var/lib/mysql
+      # 初期データ
+      - ./initdb.d:/docker-entrypoint-initdb.d
+  backend:
+    build: ../backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+  frontend:
+    build: ../frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+volumes:
+  db-data:

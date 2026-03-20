@@ -1,0 +1,9 @@
+-- 使用するDBを指定
+USE sampledb;
+
+-- テーブル作成
+CREATE TABLE IF NOT EXISTS sample_table (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
