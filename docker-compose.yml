@@ -1,38 +1,53 @@
-version: "3"
+version: '3.8'
 
 services:
-
-  db:
-    image: mysql:8.0
-    container_name: mysql_container
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: sampledb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
-    ports:
-    # この左項目、3306だとローカル内のMysqlとバッティングする？
-      - "3307:3306"
-    volumes:
-      - db-data:/var/lib/mysql
-      # 永続化用のマウント先
-      - ./mysql_data:/var/lib/mysql
-      # 初期データ
-      - ./initdb.d:/docker-entrypoint-initdb.d
-  backend:
-    build: ../backend
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
   frontend:
     build: ../frontend
+    container_name: frontend
     ports:
       - "5173:5173"
     volumes:
       - ../frontend:/app
       - /app/node_modules
+    command: npm run dev -- --host
     environment:
-      - CHOKIDAR_USEPOLLING=true
+      - VITE_API_URL=http://backend:8080
+    depends_on:
+      - backend
+
+  backend:
+    build: ../backend
+    container_name: backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../backend:/app
+      - maven-repo:/root/.m2
+    command: ./mvnw spring-boot:run
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/sampledb
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pass
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8
+    container_name: db
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=sampledb
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pass
+    volumes:
+      - db-data:/var/lib/mysql      
+      # 永続化用のマウント先
+      - ./mysql_data:/var/lib/mysql
+      # 初期データ
+      - ./initdb.d:/docker-entrypoint-initdb.d
+
 volumes:
   db-data:
+  maven-repo:
