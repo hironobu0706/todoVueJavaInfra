@@ -25,9 +25,9 @@
 >    └─mysql_data  
 <img width="907" height="591" alt="image" src="https://github.com/user-attachments/assets/ef15f159-1d7f-47eb-a2c5-1fcc65659106" />
   
-2.infraフォルダの直下でターミナルを開く
+2.infraフォルダの直下でターミナルを開く  
 
-3. `docker-compose up -d --build`　を実行  
+3.`docker-compose up -d --build`　を実行  
 ※もし失敗した場合すべてのフォルダを削除し、1からやり直し  
 
 4.`docker-compose ps -a` を実行し、ステータスがupになっていることを確認する。  
