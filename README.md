@@ -2,7 +2,11 @@
 > 必要なリポジトリは3つ  
 > + 1.インフラ、DB：todoVueJavaInfra(このリポジトリ)  
 > + 2.フロント：https://github.com/hironobu0706/todoVueJavaFrontend
-> + 3.バック：https://github.com/hironobu0706/todoVueJavaBackend  
+> + 3.バック：https://github.com/hironobu0706/todoVueJavaBackend
+
+<h1>必要なソフト</h1>
+ + docker及びdocker-compose  
+ + git
 
 <h1>手順</h1>
 1.上記3リポジトリを任意のフォルダにクローンする。  
