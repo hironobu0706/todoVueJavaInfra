@@ -10,8 +10,6 @@ services:
       - ../frontend:/app
       - /app/node_modules
     command: npm run dev -- --host
-    environment:
-      - VITE_API_URL=http://backend:8080
     depends_on:
       - backend
 
@@ -24,10 +22,6 @@ services:
       - ../backend:/app
       - maven-repo:/root/.m2
     command: ./mvnw spring-boot:run
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/sampledb
-      - SPRING_DATASOURCE_USERNAME=user
-      - SPRING_DATASOURCE_PASSWORD=pass
     depends_on:
       - db
 
@@ -37,7 +31,9 @@ services:
     ports:
       - "3307:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      # 本来であれば以下のようにenvファイルを読む形で情報を隠蔽する
+      # - MYSQL_USER=${DB_USER} # .envの変数を展開
+      # - MYSQL_PASSWORD=${DB_PASS} # .envの変数を展開
       - MYSQL_DATABASE=sampledb
       - MYSQL_USER=user
       - MYSQL_PASSWORD=pass
